@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var cafeList = map[string][]string{
@@ -62,7 +63,7 @@ func TestMainHandlerWhenOk(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	assert.Equal(t, responseRecorder.Code, http.StatusOK)
+	require.Equal(t, responseRecorder.Code, http.StatusOK)
 	assert.NotEmpty(t, responseRecorder.Body)
 
 }
@@ -83,7 +84,7 @@ func TestMainHandlerWhenCityWrong(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	assert.Equal(t, responseRecorder.Code, http.StatusBadRequest)
+	require.Equal(t, responseRecorder.Code, http.StatusBadRequest)
 	assert.Equal(t, responseRecorder.Body.String(), wrongCity)
 }
 
@@ -106,5 +107,5 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	list := strings.Split(body, ",")
 
 	assert.Equal(t, responseRecorder.Code, http.StatusOK)
-	assert.Equal(t, len(list), totalCount)
+	assert.Len(t, list, totalCount)
 }
